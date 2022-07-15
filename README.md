@@ -18,26 +18,27 @@ Please also follow the readme files under folder bart_pretrained and bert_extrac
 
 In updating...
 
-## Training
+## BART-Rewriter (Rewriter with external sentence extractor)
 
-### BART-Rewriter (Rewriter with external sentence extractor)
+### Training
 ```
     CUDA_VISIBLE_DEVICES=0,1 bash exp_rewriter/run-bart-large.sh exp_test rewriter
 ```
 
-### BART-JointSR (Rewriter with joint internal sentence selector)
-```
-    CUDA_VISIBLE_DEVICES=0,1 bash exp_rewriter/run-bart-large.sh exp_test jointsr
-```
 
-## Evaluation
-
-### BART-Rewriter (Rewriter with external sentence extractor)
+### Evaluating
 ```
     CUDA_VISIBLE_DEVICES=0 bash exp_rewriter/test-rewriter.sh exp_test rewriter bertext
 ```
 
-### BART-JointSR (Rewriter with joint internal sentence selector)
+## BART-JointSR (Rewriter with joint internal sentence selector)
+
+### Training
+```
+    CUDA_VISIBLE_DEVICES=0,1 bash exp_rewriter/run-bart-large.sh exp_test jointsr
+```
+
+### Evaluating
 ```
     CUDA_VISIBLE_DEVICES=0 bash exp_rewriter/test-rewriter.sh exp_test jointsr none
 ```
