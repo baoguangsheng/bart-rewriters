@@ -7,15 +7,15 @@
 # command help
 if [ $# == '0' ]; then
     echo "Please follow the usage:"
-    echo "    bash $0 cnndm exp_test joint2"
+    echo "    bash $0 exp_test jointsr"
     exit
 fi
 
-data=$1
-exp_path=$2
-format=$3  # previous, reorder, autoreg, joint1, joint2
+exp_path=$1
+format=$2  # rewriter, jointsr
+data=cnndm
 model_size=large  # base, large
-bart_path=../shared/bart.$model_size
+bart_path=bart_pretrained/bart.$model_size
 
 echo `date`, data: $data, exp_path: $exp_path
 tok_path=$exp_path/$data.tokenized
@@ -28,18 +28,7 @@ echo `date`, run path: $run_path
 mkdir -p $run_path
 
 echo `date`, Training model...
-if [ $data == cnndm ]; then
-  update_freq=8
-elif [ $data == wikihow ]; then
-  update_freq=4
-elif [ $data == xsum ]; then
-  update_freq=4
-elif [ $data == pubmed ]; then
-  update_freq=4
-else
-  echo Unknown dataset $data.
-  exit
-fi
+update_freq=8
 
 # running on 2 GPUs
 python train.py  $bin_path --save-dir $cp_path --tensorboard-logdir $cp_path --seed 666 --num-workers 8 --fp16 \

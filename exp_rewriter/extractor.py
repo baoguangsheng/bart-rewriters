@@ -125,12 +125,6 @@ class BARTAutoregExtractor:
                     idx = int(tok[2:-1]) - 1
                     if idx < len(docs[i]):
                         ext.append(idx)
-            if self.model_args.data_format == 'joint1':
-                half = len(ext) // 2
-                if ext[:half] == ext[half:]:
-                    ext = ext[:half]
-                else:
-                    print('Unexpected:', ext)
             exts.append(ext)
         return exts
 

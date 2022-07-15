@@ -99,7 +99,7 @@ class MultiprocessingEncoder(object):
         tids = []
         ttokens = []
 
-        if self.args.data_format == 'previous': # the format required by previous BERT ContextRewriter
+        if self.args.data_format == 'rewriter':  # the format required by previous BERT ContextRewriter
             # source
             for idx, line in enumerate(slines):
                 prefix = [bos % (tidx + 1) for tidx, sidx in enumerate(abs_art_idx) if sidx == idx]
@@ -111,59 +111,7 @@ class MultiprocessingEncoder(object):
                 prefix = [bos % (idx + 1)]
                 tids.extend(prefix + self.encode(line))
                 ttokens.extend(prefix + line.split())
-        elif self.args.data_format == 'reorder': # the format required by order sensitive rewriter
-            abs_reorder = [(tidx, sidx) for tidx, sidx in enumerate(abs_art_idx)]
-            abs_reorder = list(sorted(abs_reorder, key=lambda x: x[1]))
-            abs_reorder  = [(tidx, sidx, gidx) for gidx, (tidx, sidx) in enumerate(abs_reorder)]
-            abs_reorder = list(sorted(abs_reorder, key=lambda x: x[0]))
-            # source
-            for idx, line in enumerate(slines):
-                prefix = [bos % (gidx + 1) for tidx, sidx, gidx in abs_reorder if sidx == idx]
-                suffix = [eos] * len(prefix)
-                sids.extend(prefix + self.encode(line) + suffix)
-                stokens.extend(prefix + line.split() + suffix)
-            # target
-            for idx, line in enumerate(tlines):
-                tidx, sidx, gidx = abs_reorder[idx]
-                assert tidx == idx
-                prefix = [bos % (gidx + 1)]
-                tids.extend(prefix + self.encode(line))
-                ttokens.extend(prefix + line.split())
-        elif self.args.data_format == 'autoreg':  # the format required by autoregressive extractor: <S1> <S2>
-            # source
-            for idx, line in enumerate(slines, ):
-                prefix = [bos % (idx + 1)]
-                suffix = [eos]
-                sids.extend(prefix + self.encode(line) + suffix)
-                stokens.extend(prefix + line.split() + suffix)
-            # target
-            for idx, line in enumerate(tlines):
-                sidx = abs_art_idx[idx]
-                prefix = [bos % (sidx + 1)]
-                tids.extend(prefix)
-                ttokens.extend(prefix)
-        elif self.args.data_format == 'joint1':  # the format required by joint rewriter: <S1> <S2> </S> <S1> ...
-            # source
-            for idx, line in enumerate(slines, ):
-                prefix = [bos % (idx + 1)]
-                suffix = [eos]
-                sids.extend(prefix + self.encode(line) + suffix)
-                stokens.extend(prefix + line.split() + suffix)
-            # target
-            for idx, line in enumerate(tlines):
-                sidx = abs_art_idx[idx]
-                prefix = [bos % (sidx + 1)]
-                tids.extend(prefix)
-                ttokens.extend(prefix)
-            suffix = [eos]
-            tids.extend(suffix)
-            ttokens.extend(suffix)
-            for idx, line in enumerate(tlines):
-                sidx = abs_art_idx[idx]
-                prefix = [bos % (sidx + 1)]
-                tids.extend(prefix + self.encode(line))
-                ttokens.extend(prefix + line.split())
-        elif self.args.data_format == 'joint2':  # the format required by joint rewriter: <S1> ... <S2> ...
+        elif self.args.data_format == 'jointsr':  # the format required by joint rewriter: <S1> ... <S2> ...
             # source
             for idx, line in enumerate(slines,):
                 prefix = [bos % (idx + 1)]
@@ -198,28 +146,28 @@ def main():
     )
     parser.add_argument(
         "--data-format",
-        default='previous',
-        choices=['previous', 'reorder', 'autoreg', 'joint1', 'joint2'],
+        default='rewriter',
+        choices=['rewriter', 'jointsr'],
         help="Data format for different experiments",
     )
     parser.add_argument(
         "--source",
-        default='exp_bartbase/cnndm.tokenized/valid.source',
+        default='exp_test/cnndm.tokenized/valid.source',
         help="source file to filter/encode",
     )
     parser.add_argument(
         "--target",
-        default='exp_bartbase/cnndm.tokenized/valid.target',
+        default='exp_test/cnndm.tokenized/valid.target',
         help="target file to filter/encode",
     )
     parser.add_argument(
         "--outdir-tok",
-        default='exp_bartbase/cnndm.segmented',
+        default='exp_test/cnndm.segmented',
         help="output directory to save the encoded source/target files",
     )
     parser.add_argument(
         "--outdir-id",
-        default='exp_bartbase/cnndm.encoded',
+        default='exp_test/cnndm.encoded',
         help="output directory to save the encoded source/target files",
     )
     parser.add_argument("--workers", type=int, default=1)
