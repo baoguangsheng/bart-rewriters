@@ -3,7 +3,7 @@ import math
 import torch
 import torch.nn as nn
 
-from models.neural import MultiHeadedAttention, PositionwiseFeedForward
+from .neural import MultiHeadedAttention, PositionwiseFeedForward
 
 
 class Classifier(nn.Module):

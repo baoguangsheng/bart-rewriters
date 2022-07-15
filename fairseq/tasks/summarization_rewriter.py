@@ -121,8 +121,9 @@ def load_langpair_dataset(
     if prepend_bos:
         assert hasattr(src_dict, "bos_index") and hasattr(tgt_dict, "bos_index")
         src_dataset = PrependTokenDataset(src_dataset, src_dict.bos())
-        if tgt_dataset is not None:
-            tgt_dataset = PrependTokenDataset(tgt_dataset, tgt_dict.bos())
+        # Guangsheng Bao: skip target because target starts with eos
+        # if tgt_dataset is not None:
+        #     tgt_dataset = PrependTokenDataset(tgt_dataset, tgt_dict.bos())
 
     eos = None
     if append_source_id:
@@ -161,8 +162,8 @@ def load_langpair_dataset(
     )
 
 
-@register_task("translation")
-class TranslationTask(LegacyFairseqTask):
+@register_task("summarization_rewriter")
+class SummarizationRewriterTask(LegacyFairseqTask):
     """
     Translate from one (source) language to another (target) language.
 
@@ -305,13 +306,14 @@ class TranslationTask(LegacyFairseqTask):
             upsample_primary=self.args.upsample_primary,
             left_pad_source=self.args.left_pad_source,
             left_pad_target=self.args.left_pad_target,
-            max_source_positions=self.args.max_source_positions,
+            max_source_positions=self.args.max_source_positions - 1,  # 1 for prepended bos
             max_target_positions=self.args.max_target_positions,
             load_alignments=self.args.load_alignments,
             truncate_source=self.args.truncate_source,
             num_buckets=self.args.num_batch_buckets,
             shuffle=(split != "test"),
             pad_to_multiple=self.args.required_seq_len_multiple,
+            prepend_bos=True,
         )
 
     def build_dataset_for_inference(self, src_tokens, src_lengths, constraints=None):

@@ -430,6 +430,14 @@ def _upgrade_state_dict(state):
             1,
         )
 
+    # Guangsheng Bao: fix legacy naming
+    if state["args"].task == 'translation_joint':
+        state["args"].task = 'summarization_rewriter'
+    if state["args"].arch == 'bart_sent_autoregress_large':
+        state["args"].arch = 'transformer_rewriter_large'
+    if state["args"].criterion == 'label_smoothed_cross_entropy_sent_autoregress':
+        state["args"].criterion = 'label_smoothed_cross_entropy_rewriter'
+
     # set any missing default values in the task, model or other registries
     registry.set_defaults(state["args"], tasks.TASK_REGISTRY[state["args"].task])
     registry.set_defaults(state["args"], models.ARCH_MODEL_REGISTRY[state["args"].arch])

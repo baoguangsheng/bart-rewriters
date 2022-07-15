@@ -206,7 +206,6 @@ class Trainer(object):
     # baogs: return topk sentences
     def predict(self, batch, topk=10):
         src = batch.src
-        labels = batch.src_sent_labels
         segs = batch.segs
         clss = batch.clss
         mask_src = batch.mask_src
@@ -273,7 +272,7 @@ class Trainer(object):
             ss = sorted([s[0] for s in ss])
             # ss = [s[0] for s in ss]
             # selection to str
-            pred = '<q>'.join([src_str[i][s] for s in ss])
+            pred = '<q>'.join([src_str[i][s] for s in ss if s < len(src_str[i])])
             gold = tgt_str[i]
             src = '<q>'.join(src_str[i])
             exts.append((pred, gold, src))

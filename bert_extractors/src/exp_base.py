@@ -1,3 +1,5 @@
+import os.path
+
 import numpy as np
 import json
 import codecs
@@ -260,12 +262,15 @@ if __name__ == '__main__':
     import argparse
     from others.logging import init_logger, logger
     parser = argparse.ArgumentParser()
-    parser.add_argument("-temp_dir", default='../temp')
-    parser.add_argument("-log_file", default='../temp/exp_base.log')
+    parser.add_argument("-temp_dir", default='./temp')
+    parser.add_argument("-log_file", default='./temp/exp_base.log')
     parser.add_argument("-task", default='rouge')
     parser.add_argument("-gold", default='../exp_main_sentext_guidabs_r12L/models_guidabs_maxpos512_noproj_worddrop0.3_sentdrop0.2/cnndm.BERTSUMEXT_noblocktrigram_222000.gold')
     parser.add_argument("-candi", default='../exp_main_sentext_guidabs_r12L/models_guidabs_maxpos512_noproj_worddrop0.3_sentdrop0.2/cnndm.BERTSUMEXT_noblocktrigram_222000.candidate_ext')
     args = parser.parse_args()
+
+    if not os.path.exists(args.temp_dir):
+        os.makedirs(args.temp_dir)
 
     init_logger(args.log_file)
 
