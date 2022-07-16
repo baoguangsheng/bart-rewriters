@@ -33,7 +33,7 @@ beam_search="--beam 2 --max-len-a 0 --max-len-b 200 --min-len 20 --lenpen 1.0 --
 
 python -m exp_rewriter.rewriter $cp_path --data-format $format --source $tok_path/$D.source --target $tok_path/$D.target \
   --extractor $extractor --extractor-path 'bert_extractors/models' --rewriter-path $cp_path --outdir $res_path \
-  --batch-size 8 $beam_search \
+  --batch-size 16 $beam_search \
   > $run_path/test_${extractor}.$data.log 2>&1
 
 

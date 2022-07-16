@@ -1,3 +1,12 @@
+#!/usr/bin/env python
+'''
+We make following changes to https://github.com/artmatsak/cnn-dailymail/blob/master/make_datafiles.py to
+make the processed data consistent with https://github.com/baoguangsheng/ctx-rewriter-for-summ, so that
+previous sentence extractor BERT-Ext can be reused.
+  1) restore escaped brackets.
+  2) break paragraph into sentences.
+  3) Normalize the quotes.
+'''
 import sys
 import os
 import hashlib
@@ -44,7 +53,7 @@ def fix_missing_period(line):
   # print line[-1]
   return line + " ."
 
-# baogs: follow the preprocessing in Contextualized Rewriting
+# Guangsheng Bao: follow the preprocess in previous Contextualized Rewriting work
 def preprocess(line):
   if len(line) == 0:
     return []
@@ -156,9 +165,9 @@ def main():
   import argparse
   from tqdm import tqdm
   parser = argparse.ArgumentParser()
-  parser.add_argument('--urls', default='../shared/cnn_dm/cnn-dailymail-master/url_lists')
-  parser.add_argument("--cnn", default='../shared/cnn_dm/cnn_stories_tokenized')
-  parser.add_argument("--dm", default='../shared/cnn_dm/dm_stories_tokenized')
+  parser.add_argument('--urls', default='cnn-dailymail/url_lists')
+  parser.add_argument("--cnn", default='cnn-dailymail/cnn_stories_tokenized')
+  parser.add_argument("--dm", default='cnn-dailymail/dm_stories_tokenized')
   parser.add_argument("--res", default='exp_test/cnndm.tokenized')
   parser.add_argument("--sep", default=' ')
   args, unknown = parser.parse_known_args()

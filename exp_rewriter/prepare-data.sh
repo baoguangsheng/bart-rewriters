@@ -7,15 +7,15 @@
 # command help
 if [ $# == '0' ]; then
     echo "Please follow the usage:"
-    echo "    bash $0 cnndm exp_test base joint2"
+    echo "    bash $0 exp_test large jointsr"
     exit
 fi
 
-data=$1
-exp_path=$2
-model_size=$3  # base, large
-format=$4  # previous, reorder, autoreg, joint1, joint2
-bart_path=../shared/bart.$model_size
+exp_path=$1
+model_size=$2  # base, large
+format=$3  # rewriter, jointsr
+data=cnndm
+bart_path=bart.$model_size
 
 echo `date`, exp_path: $exp_path, data: $data
 tok_path=$exp_path/$data.tokenized
@@ -23,7 +23,7 @@ seg_path=$exp_path/$data.segmented_$format
 enc_path=$exp_path/$data.encoded_$format
 bin_path=$exp_path/$data.binarized_$format
 
-#echo `date`, Prepraring tokenized data...
+echo `date`, Prepraring tokenized data...
 python exp_common/make_datafiles.py --dataset $data --sep ' <SEP> ' --res $tok_path
 
 echo `date`, Prepraring segmented data...

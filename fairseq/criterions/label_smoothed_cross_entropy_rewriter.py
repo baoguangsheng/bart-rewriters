@@ -152,7 +152,7 @@ class LabelSmoothedCrossEntropyRewriterCriterion(FairseqCriterion):
         metrics.log_scalar("loss", loss_sum / sample_size / math.log(2), sample_size, round=3)
         metrics.log_derived("ppl", lambda meters: utils.get_perplexity(meters["nll_loss_tok"].avg))
 
-        # baogs: log loss on word tokens and special tokens for group tag
+        # Guangsheng Bao: log loss on word tokens and special tokens for group tag
         nll_loss_tok_sum = sum(log.get('nll_loss_tok', 0).sum() for log in logging_outputs)
         nll_loss_tag_sum = sum(log.get('nll_loss_tag', 0).sum() for log in logging_outputs)
         accuracy_tok_sum = sum(log.get('accuracy_tok', 0).sum() for log in logging_outputs)
