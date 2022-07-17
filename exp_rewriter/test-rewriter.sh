@@ -39,5 +39,6 @@ python -m exp_rewriter.rewriter $cp_path --data-format $format --source $tok_pat
 
 
 echo `date`, Calculating ROUGE...
+# we do not use files2rouge (https://github.com/pltrdy/files2rouge) to calculate ROUGE scores because we found it is not always consistent with previous ROUGE-1.5.5.
 cp $tok_path/test.target $res_path/test.${extractor}.ref -f
 bash exp_common/rouge155.sh $res_path/test.${extractor}.ref $res_path/test.${extractor}.gen >> $run_path/test_${extractor}.$data.log 2>&1
