@@ -20,7 +20,7 @@ Before evaluating BART-Rewriter, please follow the readme file under folder bert
 
 ## Option 1: play with the trained Models
 
-1) Download the [prepared data and trained models]().
+1) Download the [prepared data and trained models](https://drive.google.com/file/d/1uXDfsB3Zgio3s1Dg60h96-OPsyQrOeki/view?usp=sharing).
    Unzip the files into folder exp_test.
 
 2) Evaluate the models:
